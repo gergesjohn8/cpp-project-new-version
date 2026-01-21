@@ -37,28 +37,9 @@ int main() {
         "Monte Carlo (n=1000000)"
     };
 
-    R"(std::cout << std::setprecision(12);
+    std::cout << std::setprecision(12);
 
-    const double a = 0.0, b = 1.0;
-    std::cout << "Integrate f1(x)=x^2*cos(x) over [0,1]\n";
-    for (std::size_t i = 0; i < solvers.size(); ++i) {
-        double val = solvers[i]->integrate(f1, a, b);
-        std::cout << "  " << solver_names[i] << " -> " << val << "\n";
-    }
-
-    std::cout << "\nIntegrate f2(x)=x^10 over [0,1]\n";
-    for (std::size_t i = 0; i < solvers.size(); ++i) {
-        double val = solvers[i]->integrate(f2, a, b);
-        std::cout << "  " << solver_names[i] << " -> " << val << "\n";
-    }
-
-    // Example: also show usage with std::function wrapper
-    FunctionFromStd halfPower([](double x){ return std::sqrt(x); });
-    std::cout << "\nIntegrate sqrt(x) over [0,1] with Simpson (for demo): "
-              << std::make_unique<SimpsonSolver>(1000)->integrate(halfPower, 0.0, 1.0)
-              << "\n";
-    return 0;
-})"
+    
 
 //============================================
 //option 2 for display :
