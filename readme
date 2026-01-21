@@ -1,0 +1,7 @@
+For compilation on Windows:
+
+g++ -std=c++17 main.cpp src/*.cpp -Iinclude -O2 -o integrate
+.\integrate.exe
+
+g++ -std=c++17 test_integration.cpp src/*.cpp -Iinclude -O2 -o test_integrals
+ .\test_integrals.exe
