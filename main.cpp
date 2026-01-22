@@ -42,7 +42,6 @@ int main() {
     
 
 //============================================
-//option 2 for display :
 
 // True values for comparison
     const double true_f1 = 2.0 * std::cos(1.0) - std::sin(1.0);  // ≈ 0.38177329
@@ -81,34 +80,66 @@ int main() {
     }
 
 
-    const double epsilon = 1e-10;  // 0.0000000001
+    const double epsilon_f3 = 1e-6;
+    const double true_f3_adjusted = 2.0 - 2.0 * std::sqrt(epsilon_f3); 
     
     std::cout << "\n============================================================\n";
-    std::cout << "INTEGRAL 3: integral of x^(-1/2) from 0 to 1\n";
-    std::cout << "(using epsilon=" << epsilon << " to avoid singularity at x=0)\n";
-    std::cout << "True value: " << true_f3 << "\n";
+    std::cout << "INTEGRAL 3: integral of x^(-1/2) from " << epsilon_f3 << " to 1\n";
+    std::cout << "True value of integral[" << epsilon_f3 << ",1] x^(-1/2) dx = " << true_f3_adjusted << "\n";
+    std::cout << "(Note: Full integral from 0 to 1 = 2.0)\n";
     std::cout << "============================================================\n";
+
+    // Create higher-resolution solvers for this difficult function
+    std::vector<std::unique_ptr<Solver>> solvers_f3;
+    solvers_f3.emplace_back(std::make_unique<TrapezoidSolver>(100000));     // 100,000 intervals
+    solvers_f3.emplace_back(std::make_unique<SimpsonSolver>(100000));       // 100,000 intervals
+    solvers_f3.emplace_back(std::make_unique<WeddleSolver>(100000));      // 100,000 intervals
+    solvers_f3.emplace_back(std::make_unique<MonteCarloSolver>(1000000, 42));
     
-    for (std::size_t i = 0; i < solvers.size(); ++i) {
-        double result = solvers[i]->integrate(f3, epsilon, 1.0);
-        double error = std::abs(result - true_f3);
-        std::cout << "  " << solver_names[i]
-                  << " -> " << result
+        const std::vector<std::string> solver_names_f3 = {
+        "Trapezoid   (n=100000)",
+        "Simpson     (n=100000)",
+        "Midpoint    (n=100000)",
+        "Monte Carlo (M=1000000)"
+    };
+    
+    for (std::size_t i = 0; i < solvers_f3.size(); ++i) {
+        double result = solvers_f3[i]->integrate(f3, epsilon_f3, 1.0);
+        double error = std::abs(result - true_f3_adjusted);
+        std::cout << "  " << solver_names_f3[i] 
+                  << " -> " << result 
                   << "  (error: " << std::scientific << error << std::fixed << ")\n";
     }
 
 
+    const double epsilon_f4 = 1e-10;
+    const double true_f4_adjusted = -1.0 - epsilon_f4 * (std::log(epsilon_f4) - 1.0);
+
     std::cout << "\n============================================================\n";
-    std::cout << "INTEGRAL 4: integral of log(x) from 0 to 1\n";
-    std::cout << "(using epsilon=" << epsilon << " to avoid singularity at x=0)\n";
-    std::cout << "True value: " << true_f4 << "\n";
+    std::cout << "INTEGRAL 4: integral of log(x) from " << epsilon_f4 << " to 1\n";
+    std::cout << "True value of integral[" << epsilon_f4 << ",1] log(x) dx = " << true_f4_adjusted << "\n";
+    std::cout << "(Note: Full integral from 0 to 1 = -1.0)\n";
     std::cout << "============================================================\n";
+
+    // Create higher-resolution solvers for this function too
+    std::vector<std::unique_ptr<Solver>> solvers_f4;
+    solvers_f4.emplace_back(std::make_unique<TrapezoidSolver>(100000));
+    solvers_f4.emplace_back(std::make_unique<SimpsonSolver>(100000));
+    solvers_f4.emplace_back(std::make_unique<WeddleSolver>(100000));
+    solvers_f4.emplace_back(std::make_unique<MonteCarloSolver>(1000000, 42));
     
-    for (std::size_t i = 0; i < solvers.size(); ++i) {
-        double result = solvers[i]->integrate(f4, epsilon, 1.0);
-        double error = std::abs(result - true_f4);
-        std::cout << "  " << solver_names[i]
-                  << " -> " << result
+     const std::vector<std::string> solver_names_f4 = {
+        "Trapezoid   (n=100000)",
+        "Simpson     (n=100000)",
+        "Midpoint    (n=100000)",
+        "Monte Carlo (M=1000000)"
+    };
+    
+    for (std::size_t i = 0; i < solvers_f4.size(); ++i) {
+        double result = solvers_f4[i]->integrate(f4, epsilon_f4, 1.0);
+        double error = std::abs(result - true_f4_adjusted);
+        std::cout << "  " << solver_names_f4[i] 
+                  << " -> " << result 
                   << "  (error: " << std::scientific << error << std::fixed << ")\n";
     }
 
@@ -126,3 +157,17 @@ int main() {
 
     return 0;
 };
+
+
+
+//==================
+
+    
+
+    // =========================================================================
+    // TEST 4: f4(x) = log(x) on [ε, 1] (singular at x=0)
+    // =========================================================================
+    // log(x) has a weaker singularity than x^(-1/2)
+    // Mathematical note: ∫_ε^1 log(x) dx = [x*log(x) - x]_ε^1 = -1 - ε*(log(ε) - 1)
+
+    

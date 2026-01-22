@@ -13,3 +13,5 @@ public:
 private:
     std::size_t n_;  // number of subintervals
 };
+
+
