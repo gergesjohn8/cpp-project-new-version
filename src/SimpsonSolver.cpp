@@ -1,6 +1,10 @@
 #include "SimpsonSolver.h"
 #include <cmath>
 
+/*
+Implementation of the SimpsonSolver integrate method.
+*/
+
 double SimpsonSolver::integrate(const Function& f, double a, double b) const {
     validate_interval(a, b);
     const std::size_t n = n_;

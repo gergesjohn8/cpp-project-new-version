@@ -2,6 +2,11 @@
 #include "Function.h"
 #include <cmath>
 
+/*
+Several derived Function classes. These implement the operator () and represent the test functions.
+*/
+
+
 // f1(x) = x^2 * cos(x)
 class F1 : public Function {
 public:

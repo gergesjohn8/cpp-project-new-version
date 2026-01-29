@@ -1,5 +1,10 @@
 #include "Weddle2DSolver.h"
 
+/*
+Implementation fo the 2D Weddle Solver.
+Tensor product extension: corners + edge midpoints + cell midpoints
+*/
+
 double Weddle2DSolver::integrate(const Function2D& f,
                                   double a, double b,
                                   double c, double d) const {

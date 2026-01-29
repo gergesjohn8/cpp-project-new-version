@@ -1,5 +1,9 @@
 #include "Simpson2DSolver.h"
 
+
+/*
+Implementation of the Simpson2DSolver method for integration.
+*/
 double Simpson2DSolver::integrate(const Function2D& f,
                                   double a, double b,
                                   double c, double d) const {

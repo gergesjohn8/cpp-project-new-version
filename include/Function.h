@@ -5,17 +5,10 @@
 class Function {
 public:
     // Evaluate function at x
+    // All child classes have to overwrite the () operator. This will make objects "callable".
+    // virtual allows for polymorphism
+    // const means the object itself is not changed
+    // =0 makes the class abstract, you can not instantiate the class directly
     virtual double operator()(double x) const = 0;
     virtual ~Function() = default;
 };
-
-// A small utility wrapper so you can create a Function from std::function
-class FunctionFromStd : public Function {
-public:
-    explicit FunctionFromStd(std::function<double(double)> fn) : fn_(std::move(fn)) {}
-    double operator()(double x) const override { return fn_(x); }
-private:
-    std::function<double(double)> fn_;
-};
-
-

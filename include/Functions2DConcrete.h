@@ -2,6 +2,12 @@
 #include "Function2D.h"
 #include <cmath>
 
+
+/*
+Implementation of various function classes derived from Function2D. These function take 2 arguments and return a real.
+*/
+
+
 // G1(x,y) = x^2 + y^2
 // Integral over [0,1] x [0,1] = 2/3
 class G1 : public Function2D {

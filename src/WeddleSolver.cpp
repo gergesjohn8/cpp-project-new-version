@@ -1,7 +1,15 @@
 #include "WeddleSolver.h"
 
 
+/*
+Implementation of the Weddle Solver for 1d functions.
 
+Widdle's Rule (from Masud et al.)
+Combines endpoint values with midpoint evaluations
+Formula: (h/2)[f(a) + f(b) + 2·Σf(midpoints)]
+Error: O(h²)
+
+*/
 double WeddleSolver::integrate(const Function& f, double a, double b) const {
     validate_interval(a, b);
     const double h = (b - a) / static_cast<double>(n_);

@@ -4,4 +4,18 @@ g++ -std=c++17 main.cpp src/*.cpp -Iinclude -O2 -o integrate
 .\integrate.exe
 
 g++ -std=c++17 test_integration.cpp src/*.cpp -Iinclude -O2 -o test_integrals
- .\test_integrals.exe
+.\test_integrals.exe
+
+g++ -std=c++17 main_2d.cpp src/*.cpp -Iinclude -O2 -o integrate_2d
+.\integrate_2d.exe
+
+
+For compilation on MacOs:
+
+to run the 1d simulations:
+g++ -std=c++17 -O2 -Iinclude -o integrate main.cpp src/TrapezoidSolver.cpp src/SimpsonSolver.cpp src/WeddleSolver.cpp src/MonteCarloSolver.cpp
+./integrate
+
+to run the 2d simulations:
+++ -std=c++17 -O2 -I include -o test_2d main_2d.cpp src/Trapezoid2DSolver.cpp src/Simpson2DSolver.cpp src/Weddle2DSolver.cpp src/MonteCarlo2DSolver.cpp
+./integrate_2d

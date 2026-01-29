@@ -1,5 +1,9 @@
 #include "Trapezoid2DSolver.h"
 
+/*
+Implementation of the Trapezoid2dSolver integrate method.
+*/
+
 double Trapezoid2DSolver::integrate(const Function2D& f,
                                     double a, double b,
                                     double c, double d) const {

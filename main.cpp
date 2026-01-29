@@ -10,6 +10,11 @@
 #include "WeddleSolver.h"
 #include "MonteCarloSolver.h"
 
+/*
+File to test the different solver algorithms against the four test functions.
+Here only the one dimensional case is evaluated.
+*/
+
 int main() {
     // Create function objects
     F1 f1;
@@ -19,21 +24,18 @@ int main() {
 
     // Create a collection of solvers (polymorphic)
     std::vector<std::unique_ptr<Solver>> solvers;
-
-    
-    solvers.emplace_back(std::make_unique<TrapezoidSolver>(10000));
-    solvers.emplace_back(std::make_unique<SimpsonSolver>(10000));
-    solvers.emplace_back(std::make_unique<WeddleSolver>(10000));
+    // make use of SmartPointers when creating the solver objects
+    // the arguments represent the discrtization points and or the number of samples
+    solvers.emplace_back(std::make_unique<TrapezoidSolver>(100000));
+    solvers.emplace_back(std::make_unique<SimpsonSolver>(100000));
+    solvers.emplace_back(std::make_unique<WeddleSolver>(100000));
     solvers.emplace_back(std::make_unique<MonteCarloSolver>(1000000, 42));
-    
-
-
 
     // Names for printing
     const std::vector<std::string> solver_names = {
-        "Trapezoid (n=10000)",
-        "Simpson   (n=10000)",
-        "Weddle      (n=10000)",
+        "Trapezoid (n=100000)",
+        "Simpson   (n=100000)",
+        "Weddle      (n=100000)",
         "Monte Carlo (n=1000000)"
     };
 
@@ -43,7 +45,7 @@ int main() {
 
 //============================================
 
-// True values for comparison
+// True values of the integrals, for comparison
     const double true_f1 = 2.0 * std::cos(1.0) - std::sin(1.0);  // ≈ 0.38177329
     const double true_f2 = 1.0 / 11.0;                            // ≈ 0.09090909
     const double true_f3 = 2.0;                                   // exactly 2
@@ -52,6 +54,11 @@ int main() {
     // Set output precision to 12 decimal places
     std::cout << std::setprecision(12) << std::fixed;
 
+    /*
+    For each function we iterate over the vector of solvers and run the integrate method of that solver for this specific function.
+    Then the result is compare with the true value and the error is calculated.
+    The results are printed in the console.
+    */
 
     std::cout << "============================================================\n";
     std::cout << "INTEGRAL 1: integral of x^2 * cos(x) from 0 to 1\n";
@@ -79,8 +86,9 @@ int main() {
                   << "  (error: " << std::scientific << error << std::fixed << ")\n";
     }
 
-
+    // epsilon value to approxiate interval [0,1] with [epsilon, 1]
     const double epsilon_f3 = 1e-6;
+    // true integral value for adjusted interval
     const double true_f3_adjusted = 2.0 - 2.0 * std::sqrt(epsilon_f3); 
     
     std::cout << "\n============================================================\n";
@@ -91,16 +99,16 @@ int main() {
 
     // Create higher-resolution solvers for this difficult function
     std::vector<std::unique_ptr<Solver>> solvers_f3;
-    solvers_f3.emplace_back(std::make_unique<TrapezoidSolver>(100000));     // 100,000 intervals
-    solvers_f3.emplace_back(std::make_unique<SimpsonSolver>(100000));       // 100,000 intervals
-    solvers_f3.emplace_back(std::make_unique<WeddleSolver>(100000));      // 100,000 intervals
-    solvers_f3.emplace_back(std::make_unique<MonteCarloSolver>(1000000, 42));
+    solvers_f3.emplace_back(std::make_unique<TrapezoidSolver>(300000));     // 100,000 intervals
+    solvers_f3.emplace_back(std::make_unique<SimpsonSolver>(300000));       // 100,000 intervals
+    solvers_f3.emplace_back(std::make_unique<WeddleSolver>(300000));      // 100,000 intervals
+    solvers_f3.emplace_back(std::make_unique<MonteCarloSolver>(2000000, 42));
     
         const std::vector<std::string> solver_names_f3 = {
-        "Trapezoid   (n=100000)",
-        "Simpson     (n=100000)",
-        "Midpoint    (n=100000)",
-        "Monte Carlo (M=1000000)"
+        "Trapezoid   (n=300000)",
+        "Simpson     (n=300000)",
+        "Weddle    (n=300000)",
+        "Monte Carlo (M=2000000)"
     };
     
     for (std::size_t i = 0; i < solvers_f3.size(); ++i) {
@@ -111,8 +119,9 @@ int main() {
                   << "  (error: " << std::scientific << error << std::fixed << ")\n";
     }
 
-
-    const double epsilon_f4 = 1e-10;
+    // epsilon value to approxiate interval [0,1] with [epsilon, 1]
+    const double epsilon_f4 = 1e-6;
+    // true integral value for this adjusted interval
     const double true_f4_adjusted = -1.0 - epsilon_f4 * (std::log(epsilon_f4) - 1.0);
 
     std::cout << "\n============================================================\n";
@@ -123,16 +132,16 @@ int main() {
 
     // Create higher-resolution solvers for this function too
     std::vector<std::unique_ptr<Solver>> solvers_f4;
-    solvers_f4.emplace_back(std::make_unique<TrapezoidSolver>(100000));
-    solvers_f4.emplace_back(std::make_unique<SimpsonSolver>(100000));
-    solvers_f4.emplace_back(std::make_unique<WeddleSolver>(100000));
-    solvers_f4.emplace_back(std::make_unique<MonteCarloSolver>(1000000, 42));
+    solvers_f4.emplace_back(std::make_unique<TrapezoidSolver>(200000));
+    solvers_f4.emplace_back(std::make_unique<SimpsonSolver>(200000));
+    solvers_f4.emplace_back(std::make_unique<WeddleSolver>(200000));
+    solvers_f4.emplace_back(std::make_unique<MonteCarloSolver>(2000000, 42));
     
      const std::vector<std::string> solver_names_f4 = {
-        "Trapezoid   (n=100000)",
-        "Simpson     (n=100000)",
-        "Midpoint    (n=100000)",
-        "Monte Carlo (M=1000000)"
+        "Trapezoid   (n=200000)",
+        "Simpson     (n=200000)",
+        "Weddle    (n=200000)",
+        "Monte Carlo (M=2000000)"
     };
     
     for (std::size_t i = 0; i < solvers_f4.size(); ++i) {
